@@ -1,0 +1,27 @@
+.Flow-full {
+  /* height: 300;
+  width: 600;
+  border: "20px white"; */
+  margin: 0;
+  color: white;
+  background-color: #282c34;
+  padding: 0%;
+}
+
+.Flow-graph {
+  /* width: 50%; */
+  width: 1000px;
+  height: 1000px;
+  border: 5px white solid;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  position: relative;
+}
+
+.Flow-controls {
+  bottom: 0px;
+  height: 2rem;
+  width: 100%;
+  height: 20%;
+}

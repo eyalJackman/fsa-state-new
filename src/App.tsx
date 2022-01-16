@@ -1,24 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Flow from "./FSA/Flow";
 
 function App() {
+  const makeBr = (n: number): any => {
+    let arr: any[] = [];
+    const helper = (n: number) => {
+      if (n > 0) {
+        arr.push(<br key={n} />);
+        helper(n - 1);
+      }
+    };
+    helper(n);
+    return arr;
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <br />
       </header>
+      <div className="App-div">
+        <Flow />
+        {makeBr(6)}
+      </div>
     </div>
   );
 }
