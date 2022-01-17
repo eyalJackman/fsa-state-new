@@ -11,6 +11,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./Flow.css";
 import ControlsFSA from "./ControlsFSA";
 import FSATrans from "./FSATrans";
+import { animated } from "react-spring";
 
 const flowStyle = { height: "100%", width: "100%", display: "inline-block" };
 
@@ -27,6 +28,7 @@ const Flow = (props: any) => {
   const stateStyle = {
     backgroundColor: "white",
     borderRadius: "10px",
+    gap: "0px",
   };
 
   const states: FlowElement<any>[] | undefined = [
@@ -61,7 +63,7 @@ const Flow = (props: any) => {
       data: { type: "edge" },
       source: "1",
       target: "2",
-      label: "edge",
+      label: "e",
     },
   ];
 
@@ -90,22 +92,22 @@ const Flow = (props: any) => {
     createElem(event);
   };
 
-  const newEdgeHandler = (edge1: string, edge2: string, trans: string) => {
+  const newEdgeHandler = (node1: string, node2: string, trans: string) => {
     const f = (edge: string) => {
       const found = elems.findIndex(
         (e) => e.data.type === "node" && e.data.label === edge
       );
       return found !== -1 ? { id: elems[found].id, index: found } : false;
     };
-    const edgeA = f(edge1);
-    const edgeB = f(edge2);
+    const nodeA = f(node1);
+    const nodeB = f(node2);
 
-    if (edgeA && edgeB) {
+    if (nodeA && nodeB) {
       const edges: any[] = elems.filter((x) => x.data.type === "edge");
       log(`edges: ${edges}`);
 
       const found = edges.findIndex(
-        (x) => x.source === edgeA.id && x.target === edgeB.id
+        (x) => x.source === nodeA.id && x.target === nodeB.id
       );
       if (found !== -1) {
         const id = edges[found].id;
@@ -114,10 +116,10 @@ const Flow = (props: any) => {
         setElems([...elems.filter((x) => x.id !== id), edges[found]]);
       } else {
         const newEdge = {
-          id: `e-${edge1 + edge2}`,
+          id: `e-${node1 + node2}`,
           label: trans,
-          source: edgeA.id,
-          target: edgeB.id,
+          source: nodeA.id,
+          target: nodeB.id,
           data: { type: "edge" },
           arrowHeadType: "arrowclosed" as ArrowHeadType,
         };
@@ -131,77 +133,68 @@ const Flow = (props: any) => {
   const [id, setID] = useState("");
   const [bool, setBool] = useState(true);
   const didMountRef = useRef(false);
-  useEffect(() => {
-    if (didMountRef.current) {
-      setElems(
-        elems.map((elem) => {
-          // log(elems);
-          if (elem.id === id) {
-            let color = elem?.style?.backgroundColor;
-            log(elem.id);
-            elem.style = {
-              ...elem.style,
-              // !bool ? "black" : "white",
-              backgroundColor: color === "white" ? "black" : "white",
-            };
-          }
-          // setTimeout(() => setBool((b) => !b), 1000);
-          return elem;
-        })
-      );
-    } else {
-      didMountRef.current = true;
-    }
-  }, [id]);
-  // useEffect(() => {
-  //   setElems((elems) =>
-  //     elems.map((elem) => {
-  //       if (elem.id === id) {
-  //         elem.style = {
-  //           ...elem.style,
-  //           backgroundColor: !bool ? "black" : "white",
-  //           // elem?.style?.backgroundColor === "white" ? "black" : "white",
-  //         };
-  //       }
-  //       return elem;
-  //     })
-  //   );
-  //   setBool((boo) => !boo);
-  // }, [id]);
+
+  let counter = 0;
+  const updateAll = (id: string) => {
+    setElems(
+      elems.map((el) => {
+        return {
+          ...el,
+          style: {
+            ...el.style,
+            backgroundColor: el.id === id ? "black" : "white",
+            color: el.id === id ? "white" : "black",
+          },
+        };
+      })
+    );
+  };
 
   const moveChangeHandler = (input: string, start: string) => {
-    if (!input.length || !start.length) {
-      return;
+    if (input.length === 0 || start.length === 0) {
+      return false;
     }
     let index: any = elems.findIndex((x) => x.data?.label === start);
     log(index);
     if (index === -1) {
       return false;
     } else {
-      elems.map((elem) => {
-        // log(elems);
-        if (elem.id === id) {
-          let color = elem?.style?.backgroundColor;
-          log(elem.id);
-          elem.style = {
-            ...elem.style,
-            backgroundColor: color === "white" ? "black" : "white",
-          };
+      updateAll(elems[index].id);
+      let curr = elems[index];
+      let currStr = input;
+      let edges: any[] = elems.filter((elem) => elem.data.type === "edge");
+      log(edges);
+      for (const char of currStr) {
+        let arr: number[] = [];
+        edges.forEach((edge, i) => {
+          if (edge?.label === char) {
+            arr.push(i);
+          }
+        });
+        if (arr.length > 0) {
+          const randEdge = edges[arr[Math.floor(Math.random() * arr.length)]];
+          log(randEdge);
+          const findNode = elems.findIndex((x) => x.id === randEdge.target);
+          if (curr.id === randEdge.source && findNode !== -1) {
+            // setTimeout(() => {
+            log("in here");
+            curr = elems[findNode];
+            setTimeout(() => {
+              updateAll(elems[findNode].id);
+            }, 1000);
+            // }, 1000);
+          }
+        } else {
+          return false;
         }
-        return elem;
-      });
-      setID(elems[index].id);
-      // setTimeout(() => {}, 1000);
-      // setID("B");
-      // setTimeout(() => {}, 1000);
-      // setID("C");
-      // setTimeout(() => {}, 1000);
-      // setID("B");
+      }
+      // log(input.slice(0), input.charAt(0));
+      // moveChangeHandler(input.slice(1), input.charAt(0));
+      // let i = 0;
+      // setInterval(() => {
+      //   updateAll(elems[++i % 4].id);
+      // }, 1000);
     }
-    setTimeout(() => {}, 1000);
-    log(input.slice(1));
-    log(input.charAt(0));
-    moveChangeHandler(input.slice(1), input.charAt(0));
   };
 
   return (
@@ -223,6 +216,7 @@ const Flow = (props: any) => {
           <MiniMap
             nodeStrokeColor={(x) => "black"}
             nodeColor={(x) => "#777B79"}
+            maskColor="#3A3B3C"
           />
           <Controls />
         </ReactFlow>
@@ -238,19 +232,6 @@ const Flow = (props: any) => {
       <div className="Flow-FSA-mvmt">
         <br />
         <FSATrans elements={elems} onMove={moveChangeHandler} />
-        <button
-          onClick={() => {
-            if (elems[0] && elems[0].style) {
-              elems[0].style.backgroundColor = "green";
-              let items = [...elems];
-              let item = { ...items[0] };
-              setElems((elems) => [...elems]);
-              let curr: FlowElement<any> = elems[0];
-            }
-          }}
-        >
-          Change Color
-        </button>
       </div>
     </div>
   );
