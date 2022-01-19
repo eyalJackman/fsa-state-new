@@ -1,11 +1,9 @@
 .Flow-full {
-  /* height: 300;
-  width: 600;
-  border: "20px white"; */
   margin: 0;
   color: white;
   background-color: #282c34;
   padding: 0%;
+  font-size: 200%;
 }
 
 .Flow-graph {
@@ -24,4 +22,35 @@
   height: 2rem;
   width: 100%;
   height: 20%;
+  display: inline-block;
+  line-height: 200%;
+  border: white solid;
+}
+.Flow-controls button {
+  background-color: green;
+}
+
+/* .Flow-controls input:submit {
+  size: 40px;
+} */
+
+/* .Flow-controlsID p {
+  font-size: 200%;
+} */
+
+p {
+  font-size: larger;
+}
+
+.container {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column-reverse;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+}
+.item {
+  flex: 0 1 auto;
+  margin: 8px;
 }

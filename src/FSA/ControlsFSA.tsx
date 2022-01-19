@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import EdgeAdder from "./EdgeAdder";
 import "./Flow.css";
+import FSATrans from "./FSATrans";
 
 const ControlsFSA = (props: any) => {
   const [state, setState] = useState("");
@@ -16,14 +17,21 @@ const ControlsFSA = (props: any) => {
   };
 
   return (
-    <div>
+    <div className="item">
       <form onSubmit={newStateHandler}>
         <label>New State Creation</label>
         <input type="text" onChange={stateNameHandler} value={state} />
         <input type="submit" />
       </form>
-      <button onClick={props.onClear}>Clear</button>
-      <EdgeAdder onEdge={edgeHandler} />
+      <button className="item" onClick={props.onClear}>
+        Clear
+      </button>
+      <EdgeAdder className="item" onEdge={edgeHandler} />
+      <FSATrans
+        className="item"
+        elements={props.elements}
+        onMove={props.onMove}
+      />
     </div>
   );
 };

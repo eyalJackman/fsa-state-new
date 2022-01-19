@@ -23,7 +23,7 @@ function App() {
       </header>
       <div className="App-div">
         <Flow />
-        {makeBr(6)}
+        {/* {makeBr(6)} */}
       </div>
     </div>
   );

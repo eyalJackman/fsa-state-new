@@ -11,7 +11,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./Flow.css";
 import ControlsFSA from "./ControlsFSA";
 import FSATrans from "./FSATrans";
-import { animated } from "react-spring";
 
 const flowStyle = { height: "100%", width: "100%", display: "inline-block" };
 
@@ -28,10 +27,12 @@ const Flow = (props: any) => {
   const stateStyle = {
     backgroundColor: "white",
     borderRadius: "10px",
-    gap: "0px",
+    // width: "9rem",
+    // height: "2rem",
+    // alignItems: "center",
   };
 
-  const states: FlowElement<any>[] | undefined = [
+  const states: any[] = [
     {
       id: "1",
       data: { label: "A", type: "node" },
@@ -57,24 +58,40 @@ const Flow = (props: any) => {
       style: stateStyle,
     },
   ];
-  const edges = [
+  const edgeStart: {
+    id: string;
+    data: { type: string };
+    source: string;
+    target: string;
+    label: string;
+    arrowHeadType: string;
+  }[] = [
     {
       id: "e1-2",
       data: { type: "edge" },
       source: "1",
       target: "2",
       label: "e",
+      arrowHeadType: "arrowclosed" as ArrowHeadType,
     },
   ];
 
-  const [elems, setElems] = useState(states.concat(edges));
+  const [elems, setElems] = useState(states.concat(edgeStart));
+  const [edges, setEdges] = useState(edgeStart);
+
+  useEffect(() => {
+    if (elems.length === 0) {
+      setEdges([]);
+    } else if (elems[elems.length - 1].data.type === "edge") {
+      setEdges((e) => [...e, elems[elems.length - 1]]);
+    }
+  }, [elems]);
 
   const clearHandler = () => {
     setElems([]);
   };
 
   const createElem = (stateName: string) => {
-    log(elems);
     if (
       stateName &&
       !elems.some((x) => x.data.type === "node" && x.data.label === stateName)
@@ -103,15 +120,14 @@ const Flow = (props: any) => {
     const nodeB = f(node2);
 
     if (nodeA && nodeB) {
-      const edges: any[] = elems.filter((x) => x.data.type === "edge");
-      log(`edges: ${edges}`);
+      // const edges: any[] = elems.filter((x) => x.data.type === "edge");
+      // log(`edges: ${edges}`);
 
       const found = edges.findIndex(
         (x) => x.source === nodeA.id && x.target === nodeB.id
       );
       if (found !== -1) {
         const id = edges[found].id;
-        log(edges[found].label);
         edges[found].label += ` + ${trans}`;
         setElems([...elems.filter((x) => x.id !== id), edges[found]]);
       } else {
@@ -130,11 +146,7 @@ const Flow = (props: any) => {
   const onLoad = (instance: any) => {
     instance.fitView();
   };
-  const [id, setID] = useState("");
-  const [bool, setBool] = useState(true);
-  const didMountRef = useRef(false);
 
-  let counter = 0;
   const updateAll = (id: string) => {
     setElems(
       elems.map((el) => {
@@ -150,6 +162,15 @@ const Flow = (props: any) => {
     );
   };
 
+  const delay = (ids: string[]) => {
+    setTimeout(() => {
+      updateAll(ids[0]);
+      let newIDs = ids.slice(1);
+      if (newIDs.length) {
+        delay(newIDs);
+      }
+    }, 1000);
+  };
   const moveChangeHandler = (input: string, start: string) => {
     if (input.length === 0 || start.length === 0) {
       return false;
@@ -161,12 +182,22 @@ const Flow = (props: any) => {
     } else {
       updateAll(elems[index].id);
       let curr = elems[index];
-      let currStr = input;
-      let edges: any[] = elems.filter((elem) => elem.data.type === "edge");
+      let currStr: string = input;
+      // let edges: any[] = elems
+      //   .filter((elem) => elem.data.type === "edge")
+      //   .map((edge) => {
+      //     return {
+      //       ...edge,
+      //       trans: edge.label.split(" + "),
+      //     };
+      //   });
+      const transitions = edges.map((edge) => edge.label.split(" + "));
+      let sendIDs: string[] = [];
       log(edges);
       for (const char of currStr) {
         let arr: number[] = [];
         edges.forEach((edge, i) => {
+          log(edge.trans);
           if (edge?.label === char) {
             arr.push(i);
           }
@@ -179,21 +210,15 @@ const Flow = (props: any) => {
             // setTimeout(() => {
             log("in here");
             curr = elems[findNode];
-            setTimeout(() => {
-              updateAll(elems[findNode].id);
-            }, 1000);
+            log(elems[findNode].id);
+            sendIDs.push(elems[findNode].id);
             // }, 1000);
           }
         } else {
           return false;
         }
       }
-      // log(input.slice(0), input.charAt(0));
-      // moveChangeHandler(input.slice(1), input.charAt(0));
-      // let i = 0;
-      // setInterval(() => {
-      //   updateAll(elems[++i % 4].id);
-      // }, 1000);
+      delay(sendIDs);
     }
   };
 
@@ -221,17 +246,16 @@ const Flow = (props: any) => {
           <Controls />
         </ReactFlow>
       </div>
-      <div className="Flow-controls">
+      <div className="Flow-graph">
         <ControlsFSA
+          className="container"
           onClear={clearHandler}
           onNewState={newStateHandler}
           onNewEdge={newEdgeHandler}
+          onMove={moveChangeHandler}
+          elements={elems}
         />
         <br />
-      </div>
-      <div className="Flow-FSA-mvmt">
-        <br />
-        <FSATrans elements={elems} onMove={moveChangeHandler} />
       </div>
     </div>
   );

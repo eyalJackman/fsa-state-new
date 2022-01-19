@@ -3,7 +3,6 @@ import { useState } from "react";
 const FSATrans = (props: any) => {
   const [inputStr, setInputStr] = useState("");
   const [start, setStart] = useState("");
-
   const moveHandler = (e: any) => {
     e.preventDefault();
     if (inputStr !== "" || start !== "") {
@@ -12,9 +11,8 @@ const FSATrans = (props: any) => {
     setInputStr("");
     setStart("");
   };
-
   return (
-    <form onSubmit={moveHandler}>
+    <form className="Flow-controlsID" onSubmit={moveHandler}>
       <label>Input String</label>
       <input
         value={inputStr}
