@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SubmitButton from "./UI/SubmitButton.styled";
 
 const FSATrans = (props: any) => {
   const [inputStr, setInputStr] = useState("");
@@ -12,21 +13,23 @@ const FSATrans = (props: any) => {
     setStart("");
   };
   return (
-    <form className="Flow-controlsID" onSubmit={moveHandler}>
-      <label>Input String</label>
-      <input
-        value={inputStr}
-        onChange={(str) => setInputStr(str.target.value)}
-        type="text"
-      />
-      <label>Start State</label>
-      <input
-        type="text"
-        value={start}
-        onChange={(e) => setStart(e.target.value)}
-      />
-      <input type="submit"></input>
-    </form>
+    <div className="Flow-controlsID">
+      <form onSubmit={moveHandler}>
+        <label>Start State</label>
+        <input
+          type="text"
+          value={start}
+          onChange={(e) => setStart(e.target.value)}
+        />
+        <label>Input String</label>
+        <input
+          value={inputStr}
+          onChange={(str) => setInputStr(str.target.value)}
+          type="text"
+        />
+        <SubmitButton type="submit" />
+      </form>
+    </div>
   );
 };
 

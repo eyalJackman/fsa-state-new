@@ -1,5 +1,15 @@
 import React, { useState } from "react";
 import "./EdgeAdder.css";
+import "./Flow.css";
+import styled from "styled-components";
+import SubmitButton from "./UI/SubmitButton.styled";
+
+const InputTrans = styled.input`
+  box-shadow: 2px 2px 5px #333;
+  width: 10%;
+  height: 2.5em;
+  border-radius: 15px;
+`;
 
 const EdgeAdder = (props: any) => {
   const [edgeA, setEdgeA] = useState("");
@@ -7,7 +17,7 @@ const EdgeAdder = (props: any) => {
   const [trans, setTrans] = useState("");
 
   return (
-    <div className="transitions">
+    <div className="item">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -24,21 +34,18 @@ const EdgeAdder = (props: any) => {
           value={edgeA}
           onChange={(e) => setEdgeA(e.target.value)}
         />
-        <div className="rightarrow">
-          via
-          <input
-            type="text"
-            value={trans}
-            onChange={(e) => setTrans(e.target.value)}
-          />
-        </div>
+        <InputTrans
+          type="text"
+          value={trans}
+          onChange={(e) => setTrans(e.target.value)}
+        />
         <input
           className="rounded-input-text"
           type="text"
           value={edgeB}
           onChange={(e) => setEdgeB(e.target.value)}
         />
-        <input type="submit" />
+        <SubmitButton type="submit" />
       </form>
     </div>
   );

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import EdgeAdder from "./EdgeAdder";
 import "./Flow.css";
 import FSATrans from "./FSATrans";
+import SubmitButton from "./UI/SubmitButton.styled";
+import ClearButton from "./UI/ClearButton.styles";
 
 const ControlsFSA = (props: any) => {
   const [state, setState] = useState("");
@@ -17,18 +19,20 @@ const ControlsFSA = (props: any) => {
   };
 
   return (
-    <div className="item">
-      <form onSubmit={newStateHandler}>
-        <label>New State Creation</label>
-        <input type="text" onChange={stateNameHandler} value={state} />
-        <input type="submit" />
-      </form>
-      <button className="item" onClick={props.onClear}>
+    <div className="container">
+      <div className="item">
+        <form onSubmit={newStateHandler}>
+          <label>New State Creation</label>
+          <input type="text" onChange={stateNameHandler} value={state} />
+          <SubmitButton type="submit" />
+        </form>
+      </div>
+      <ClearButton className="item" onClick={props.onClear}>
         Clear
-      </button>
+      </ClearButton>
       <EdgeAdder className="item" onEdge={edgeHandler} />
       <FSATrans
-        className="item"
+        className="item trans"
         elements={props.elements}
         onMove={props.onMove}
       />

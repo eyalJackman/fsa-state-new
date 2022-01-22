@@ -21,7 +21,17 @@ function App() {
       <header className="App-header">
         <br />
       </header>
-      <div className="App-div">
+      <span
+        style={{
+          fontSize: "48px",
+          fontWeight: "bold",
+          color: "white",
+          padding: "10px",
+        }}
+      >
+        Finite State Automaton
+      </span>
+      <div className="App-div" style={{ backgroundColor: "darkgray" }}>
         <Flow />
         {/* {makeBr(6)} */}
       </div>

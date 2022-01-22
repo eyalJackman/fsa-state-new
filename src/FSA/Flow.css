@@ -4,30 +4,36 @@
   background-color: #282c34;
   padding: 0%;
   font-size: 200%;
+  box-shadow: 10px 10px 15px #333;
+  text-align: center;
+  display: flex;
+  padding: 10px;
 }
 
 .Flow-graph {
   /* width: 50%; */
   width: 1000px;
-  height: 1000px;
+  height: 700px;
   border: 5px white solid;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   margin: auto;
   position: relative;
+  display: inline-block;
 }
 
 .Flow-controls {
-  bottom: 0px;
-  height: 2rem;
-  width: 100%;
-  height: 20%;
-  display: inline-block;
+  /* bottom: 0px; */
+  /* width: 100%; */
   line-height: 200%;
   border: white solid;
+  white-space: nowrap;
+  display: flex;
 }
 .Flow-controls button {
-  background-color: green;
+  background-color: orangered;
+  font-weight: bolder;
+  color: white;
 }
 
 /* .Flow-controls input:submit {
@@ -45,12 +51,24 @@ p {
 .container {
   display: flex;
   flex-wrap: nowrap;
-  flex-direction: column-reverse;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
   align-content: center;
 }
 .item {
-  flex: 0 1 auto;
-  margin: 8px;
+  /* flex: 0 1 auto;
+  margin: 10px; */
+  /* padding: 1px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  margin: 1rem 0;
+  white-space: nowrap;
+  /* background-color: #4b4b4b; */
+}
+
+.trans {
+  white-space: nowrap;
 }

@@ -10,9 +10,17 @@
   margin: auto 10px auto 10px;
   font-size: large;
 }
-/* 
+
 .transitions {
   text-align: center;
-  justify-content: center;
+  justify-content: baseline;
   display: inline-block;
+}
+
+/* .arrow-right {
+  width: 10;
+  height: 10;
+  border-top: 60px solid transparent;
+  border-bottom: 60px solid transparent;
+  border-left: 60px solid black;
 } */

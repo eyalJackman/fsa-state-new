@@ -194,26 +194,41 @@ const Flow = (props: any) => {
       const transitions = edges.map((edge) => edge.label.split(" + "));
       let sendIDs: string[] = [];
       log(edges);
-      for (const char of currStr) {
-        let arr: number[] = [];
-        edges.forEach((edge, i) => {
-          log(edge.trans);
-          if (edge?.label === char) {
-            arr.push(i);
-          }
+      while (currStr.length > 0) {
+        let arr: number[][] = [];
+        // edges.forEach((edge, i) => {
+        //   log(edge.trans);
+        //   if (edge?.label === char) {
+        //     arr.push(i);
+        //   }
+        // });
+        transitions.forEach((edge, i) => {
+          edge.forEach((trans, j) => {
+            if (currStr.startsWith(trans)) {
+              arr.push([i, j]);
+            }
+          });
         });
         if (arr.length > 0) {
-          const randEdge = edges[arr[Math.floor(Math.random() * arr.length)]];
-          log(randEdge);
+          // const randEdge = edges[arr[Math.floor(Math.random() * arr.length)]];
+          const edge_trans = arr[Math.floor(Math.random() * arr.length)];
+          const randEdge = edges[edge_trans[0]];
           const findNode = elems.findIndex((x) => x.id === randEdge.target);
           if (curr.id === randEdge.source && findNode !== -1) {
-            // setTimeout(() => {
-            log("in here");
-            curr = elems[findNode];
-            log(elems[findNode].id);
             sendIDs.push(elems[findNode].id);
-            // }, 1000);
+            curr = elems[findNode];
+            currStr = currStr.slice(transitions[edge_trans[1]].length);
           }
+          // log(randEdge);
+          // const findNode = elems.findIndex((x) => x.id === randEdge.target);
+          // if (curr.id === randEdge.source && findNode !== -1) {
+          //   // setTimeout(() => {
+          //   log("in here");
+          //   curr = elems[findNode];
+          //   log(elems[findNode].id);
+          //   sendIDs.push(elems[findNode].id);
+          //   // }, 1000);
+          // }
         } else {
           return false;
         }
@@ -224,9 +239,6 @@ const Flow = (props: any) => {
 
   return (
     <div className="Flow-full">
-      <span style={{ fontSize: "48px", fontWeight: "bold" }}>
-        Finite State Automaton
-      </span>
       <div className="Flow-graph">
         <ReactFlow
           preventScrolling
@@ -246,9 +258,9 @@ const Flow = (props: any) => {
           <Controls />
         </ReactFlow>
       </div>
-      <div className="Flow-graph">
+      <div className="Flow-controls">
         <ControlsFSA
-          className="container"
+          className=""
           onClear={clearHandler}
           onNewState={newStateHandler}
           onNewEdge={newEdgeHandler}
