@@ -9,7 +9,7 @@
 
 </div>
 
-### The project creates a finite state automaton with state creation, transition creation, and state traversal given an input string.
+### The project creates a non-deterministic finite state automaton with state creation, transition creation, and state traversal given an input string.
 
 ---
 ## Built With
