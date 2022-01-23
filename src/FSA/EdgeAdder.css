@@ -1,8 +1,5 @@
 .rounded-input-text {
-  /* background-color: black; */
-  /* background-color: "blue"; */
   border-radius: 10px;
-  /* size: 50px; */
   height: 2rem;
   width: 10rem;
   text-align: center;
@@ -16,11 +13,3 @@
   justify-content: baseline;
   display: inline-block;
 }
-
-/* .arrow-right {
-  width: 10;
-  height: 10;
-  border-top: 60px solid transparent;
-  border-bottom: 60px solid transparent;
-  border-left: 60px solid black;
-} */

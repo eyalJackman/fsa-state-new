@@ -11,20 +11,16 @@
 }
 
 .Flow-graph {
-  /* width: 50%; */
   width: 1000px;
   height: 700px;
   border: 5px white solid;
   display: flex;
-  /* justify-content: center; */
   margin: auto;
   position: relative;
   display: inline-block;
 }
 
 .Flow-controls {
-  /* bottom: 0px; */
-  /* width: 100%; */
   line-height: 200%;
   border: white solid;
   white-space: nowrap;

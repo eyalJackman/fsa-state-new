@@ -1,16 +1,12 @@
 import ReactFlow, {
   Controls,
-  FlowElement,
   MiniMap,
   addEdge,
   ArrowHeadType,
-  Elements,
-  Edge,
 } from "react-flow-renderer";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Flow.css";
 import ControlsFSA from "./ControlsFSA";
-import FSATrans from "./FSATrans";
 
 const flowStyle = { height: "100%", width: "100%", display: "inline-block" };
 
@@ -27,9 +23,6 @@ const Flow = (props: any) => {
   const stateStyle = {
     backgroundColor: "white",
     borderRadius: "10px",
-    // width: "9rem",
-    // height: "2rem",
-    // alignItems: "center",
   };
 
   const states: any[] = [
@@ -120,9 +113,6 @@ const Flow = (props: any) => {
     const nodeB = f(node2);
 
     if (nodeA && nodeB) {
-      // const edges: any[] = elems.filter((x) => x.data.type === "edge");
-      // log(`edges: ${edges}`);
-
       const found = edges.findIndex(
         (x) => x.source === nodeA.id && x.target === nodeB.id
       );
@@ -183,25 +173,11 @@ const Flow = (props: any) => {
       updateAll(elems[index].id);
       let curr = elems[index];
       let currStr: string = input;
-      // let edges: any[] = elems
-      //   .filter((elem) => elem.data.type === "edge")
-      //   .map((edge) => {
-      //     return {
-      //       ...edge,
-      //       trans: edge.label.split(" + "),
-      //     };
-      //   });
       const transitions = edges.map((edge) => edge.label.split(" + "));
       let sendIDs: string[] = [];
       log(edges);
       while (currStr.length > 0) {
         let arr: number[][] = [];
-        // edges.forEach((edge, i) => {
-        //   log(edge.trans);
-        //   if (edge?.label === char) {
-        //     arr.push(i);
-        //   }
-        // });
         transitions.forEach((edge, i) => {
           edge.forEach((trans, j) => {
             if (currStr.startsWith(trans)) {
@@ -210,7 +186,6 @@ const Flow = (props: any) => {
           });
         });
         if (arr.length > 0) {
-          // const randEdge = edges[arr[Math.floor(Math.random() * arr.length)]];
           const edge_trans = arr[Math.floor(Math.random() * arr.length)];
           const randEdge = edges[edge_trans[0]];
           const findNode = elems.findIndex((x) => x.id === randEdge.target);
@@ -219,16 +194,6 @@ const Flow = (props: any) => {
             curr = elems[findNode];
             currStr = currStr.slice(transitions[edge_trans[1]].length);
           }
-          // log(randEdge);
-          // const findNode = elems.findIndex((x) => x.id === randEdge.target);
-          // if (curr.id === randEdge.source && findNode !== -1) {
-          //   // setTimeout(() => {
-          //   log("in here");
-          //   curr = elems[findNode];
-          //   log(elems[findNode].id);
-          //   sendIDs.push(elems[findNode].id);
-          //   // }, 1000);
-          // }
         } else {
           return false;
         }
@@ -247,7 +212,6 @@ const Flow = (props: any) => {
           onLoad={onLoad}
           onNodeDragStart={(event, node) => {
             event.preventDefault();
-            // node.style?.backgroundColor = 'green';
           }}
         >
           <MiniMap
